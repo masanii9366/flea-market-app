@@ -13,28 +13,52 @@ class ItemController extends Controller
     //商品一覧
     public function index(Request $request)
     {
-        if ($request->tab === 'mylist') {
+       $keyword = $request->keyword;
+
+       if ($request->tab === 'mylist') {
 
         if (!auth()->check()) {
+
             $items = collect();
+
         } else {
-            $items = auth()->user()
+
+            $query = auth()->user()
                 ->likedItems()
-                ->with(['categories', 'condition', 'purchase'])
-                ->get();
+                ->with([
+                    'categories',
+                    'condition',
+                    'purchase',
+                ]);
+
+            if ($keyword) {
+                $query->where('name', 'like', "%{$keyword}%");
+            }
+
+            $items = $query->get();
         }
 
-       } else {
+          } else {
 
-            $items = Item::with([
+        $query = Item::with([
             'categories',
             'condition',
             'purchase',
-            ])->get();
-       }
+        ]);
 
-       return view('items.index', compact('items'));
+        if (auth()->check()) {
+            $query->where('user_id', '!=', auth()->id());
+        }
+
+        if ($keyword) {
+            $query->where('name', 'like', "%{$keyword}%");
+        }
+
+        $items = $query->get();
     }
+
+    return view('items.index', compact('items'));
+}
     //showメソッド
     public function show(Item $item)
     {
@@ -83,7 +107,14 @@ class ItemController extends Controller
     }
 //コメント投稿
     public function comment(Request $request, Item $item)
-    {
+    {   
+        $request->validate([
+          'content' => 'required|max:255',
+        ], [
+          'content.required' => 'コメントを入力してください',
+          'content.max' => 'コメントは255文字以内で入力してください',
+        ]);
+
         Comment::create([
             'user_id' => auth()->id(),
             'item_id' => $item->id,

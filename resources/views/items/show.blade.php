@@ -69,6 +69,14 @@
 
 <h3>コメント投稿</h3>
 
+@if ($errors->any())
+    <div style="color:red;">
+        @foreach ($errors->all() as $error)
+            <p>{{ $error }}</p>
+        @endforeach
+    </div>
+@endif
+
 <form action="/item/{{ $item->id }}/comment" method="POST">
     @csrf
 
