@@ -6,6 +6,16 @@
 
 <h1>マイページ</h1>
 
+@if ($user->profile_image)
+    <img
+        src="{{ asset('storage/' . $user->profile_image) }}"
+        width="120"
+        alt="プロフィール画像"
+    >
+@endif
+
+<p>{{ $user->name }}</p>
+
 <p>
     <a href="/mypage/profile">
         プロフィール編集

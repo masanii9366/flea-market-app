@@ -6,7 +6,7 @@
 
 <h1>商品出品</h1>
 
-<form action="/sell" method="POST">
+<form action="/sell" method="POST" enctype="multipart/form-data">
     @csrf
 
     <div>
@@ -20,21 +20,33 @@
     </div>
 
     <div>
-        <label>カテゴリー</label>
+    <label>商品画像</label>
+    <input type="file" name="image">
+</div>
 
-        <select name="category_id">
-            @foreach ($categories as $category)
-                <option value="{{ $category->id }}">
-                    {{ $category->name }}
-                </option>
-            @endforeach
-        </select>
-    </div>
+<div>
+    <label>カテゴリー</label>
 
-    <div>
-        <label>商品の状態</label>
-        <input type="text" name="condition">
-    </div>
+    <select name="category_id">
+        @foreach ($categories as $category)
+            <option value="{{ $category->id }}">
+                {{ $category->name }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
+<div>
+    <label>商品の状態</label>
+
+    <select name="condition_id">
+        @foreach ($conditions as $condition)
+            <option value="{{ $condition->id }}">
+                {{ $condition->name }}
+            </option>
+        @endforeach
+    </select>
+</div>
 
     <div>
         <label>価格</label>

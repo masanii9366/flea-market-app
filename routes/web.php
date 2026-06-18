@@ -43,7 +43,7 @@ Route::post('/logout', function () {
 Route::get('/', [ItemController::class, 'index']);
 /*商品詳細ルート*/
 Route::get('/item/{item}', [ItemController::class, 'show']);
-
+/*商品出品*/
 Route::get('/sell', [ItemController::class, 'create'])->middleware('auth');
 Route::post('/sell', [ItemController::class, 'store'])->middleware('auth');
 

@@ -35,6 +35,10 @@
 @foreach ($items as $item)
 
 <div style="border:1px solid #000; margin-bottom:20px; padding:10px;">
+    
+    @if ($item->image)
+       <img src="{{ asset('storage/' . $item->image) }}" width="150">
+    @endif
 
     <h2>
        <a href="/item/{{ $item->id }}">

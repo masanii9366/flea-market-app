@@ -10,6 +10,10 @@
 
 <div style="border:1px solid black; padding:20px;">
 
+    @if ($item->image)
+        <img src="{{ asset('storage/' . $item->image) }}" width="300">
+    @endif
+
     <h2>{{ $item->name }}</h2>
 
     @if ($item->purchase)

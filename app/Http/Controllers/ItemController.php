@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Models\Category;
 use App\Models\Like;
 use App\Models\Comment;
+use App\Models\Condition;
 
 class ItemController extends Controller
 {
@@ -68,26 +69,35 @@ class ItemController extends Controller
     }
 
     public function create()
-   {
+    {
       $categories = Category::all();
+      $conditions = Condition::all();
 
-      return view('items.create', compact('categories'));
+      return view('items.create', compact('categories', 'conditions'));
    }
 
     public function store(Request $request)
     {
-       Item::create([
-        'user_id' => auth()->id(),
-        'category_id' => $request->category_id,
-        'name' => $request->name,
-        'brand' => $request->brand,
-        'description' => $request->description,
-        'price' => $request->price,
-        'condition' => $request->condition,
-      ]);
+       $imagePath = null;
 
-      return redirect('/');
-   }
+       if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('items', 'public');
+       }
+
+       $item = Item::create([
+         'user_id' => auth()->id(),
+         'condition_id' => $request->condition_id,
+         'name' => $request->name,
+         'brand' => $request->brand,
+         'description' => $request->description,
+         'price' => $request->price,
+         'image' => $imagePath,
+       ]);
+
+       $item->categories()->attach($request->category_id);
+
+       return redirect('/');
+    }
     //いいね登録
     public function like(Item $item)
     {
