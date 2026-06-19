@@ -15,6 +15,11 @@ class AddressController extends Controller
 
     public function update(Request $request, Item $item)
     {
+        $request->validate([
+            'postal_code' => 'required',
+            'address' => 'required',
+        ]);
+
         Address::updateOrCreate(
             [
                 'user_id' => auth()->id(),

@@ -20,6 +20,14 @@
     <p style="color:red;">
         SOLD
     </p>
+    @else
+      @auth
+        <p>
+            <a href="/purchase/{{ $item->id }}">
+                購入する
+            </a>
+        </p>
+      @endauth
     @endif
 
     <p>
